@@ -1,0 +1,4 @@
+[04-Nov-2020 04:10:38 UTC] PHP Warning:  Unsupported declare 'strict_types' in /home/qc4vm/qc/vendor/phpunit/phpunit/src/Framework/Assert/Functions.php on line 1
+[04-Nov-2020 04:10:38 UTC] PHP Fatal error:  Default value for parameters with a class type hint can only be NULL in /home/qc4vm/qc/vendor/phpunit/phpunit/src/Framework/Assert/Functions.php on line 88
+[04-Nov-2020 04:10:51 UTC] PHP Warning:  Unsupported declare 'strict_types' in /home/qc4vm/qc/vendor/phpunit/phpunit/src/Framework/Assert/Functions.php on line 1
+[04-Nov-2020 04:10:51 UTC] PHP Fatal error:  Default value for parameters with a class type hint can only be NULL in /home/qc4vm/qc/vendor/phpunit/phpunit/src/Framework/Assert/Functions.php on line 88
