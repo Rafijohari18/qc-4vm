@@ -13,7 +13,6 @@ use Auth;
 use DB;
 use Image;
 use Illuminate\Support\Str;
-use File;
 
 class UsersController extends Controller
 {
@@ -169,10 +168,10 @@ class UsersController extends Controller
                  $imageName = Str::replaceLast(' ', '-', $users['name']).'-'.
                  date('Y-m-d-His').'.'.$request->file('photo')->guessExtension();
                  
-                 $request->file('photo')->move('userfile/photo', $imageName);
+                 $request->file('photo')->move(public_path('userfile/photo'), $imageName);
 
                 if ($users['profile_photo_path'] != null) {
-                    $location = 'userfile/photo/'.$users['profile_photo_path'];
+                    $location = public_path('userfile/photo/'.$users['profile_photo_path']);
                     File::delete($location);
                 }
 

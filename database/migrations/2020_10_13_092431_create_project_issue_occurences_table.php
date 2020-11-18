@@ -26,7 +26,7 @@ class CreateProjectIssueOccurencesTable extends Migration
             $table->unsignedBigInteger('submitted_by')->nullable();
             $table->integer('occurence')->default(0);
             $table->text('extra_note')->nullable();
-            $table->text('extra_attachment');
+            $table->json('extra_attachment');
             $table->unsignedBigInteger('handled_by')->nullable();
             $table->text('handler_note')->nullable();
             $table->boolean('solved')->default(false);

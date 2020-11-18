@@ -31,8 +31,12 @@ class CreateProjectIssuesTable extends Migration
                          .'3 = Error, 4 = Process-breaking Error');
             $table->string('url')->nullable();
             $table->text('reproduction_steps');
-            $table->text('attachments')->nullable();
-            $table->tinyInteger('status');
+            $table->json('attachments')
+                ->comment('array of files, bisa gambar atau video');
+            $table->tinyInteger('status')
+                ->comment('0 = Pending, 1 = Reissued, 10 = Handled, 11 = On Hold'
+                         .', 20 = Fixed, 21 = Nothing Wrong, 30 = Solved, '
+                         .'31 = Closed (not solved)');
 
             $table->foreign('project_id')->references('id')->on('projects')
                     ->cascadeOnDelete();

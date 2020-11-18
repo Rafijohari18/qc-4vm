@@ -41,15 +41,15 @@ class ProjectController extends Controller
         $data['title']         = 'Create';
         $data['type']          = strtolower($data['title']);
         $data['PM']            = User::with('roles')->whereHas('roles',function($q){
-                                    $q->where('id',5);
+                                    $q->where('id',10);
                                 })->get();
         
         $data['PGM']           = User::with('roles')->whereHas('roles',function($q){
-                                    $q->where('id',6);
+                                    $q->where('id',11);
                                 })->get();
 
         $data['SPT']           = User::with('roles')->whereHas('roles',function($q){
-                                    $q->whereIn('id', [7,8]);
+                                    $q->whereIn('id', [12,13]);
                                 })->get();                
                     
         $data['jenis_project'] = JenisProject::all();                
@@ -89,35 +89,23 @@ class ProjectController extends Controller
             foreach($support as $supp){
                 $support_id[] = $supp->User->id;
             }
-            
-            
-            if(isset($support_id)){
-                 $collectSPR = collect($support_id);
-                 
-                 $data['spr_id'] = $collectSPR->map(function($item2, $key2) {
-                    return $item2;
-                 })->all();
-            }
-            
-            if(isset($promanager_id)){
-                 $collectPM = collect($promanager_id);
-                 $data['pm_id'] = $collectPM->map(function($item, $key) {
-                    return $item;
-                })->all();
-            }
-    
-    
-            if(isset($programmer_id )){
-                $collectPGM = collect($programmer_id);
-                
-                $data['pgm_id'] = $collectPGM->map(function($item1, $key1) {
-                    return $item1;
-                 })->all();
-    
-            }
            
+    
+            $collectPM = collect($promanager_id);
+            $collectPGM = collect($programmer_id);
+            $collectSPR = collect($support_id);
             
-            
+            $data['pm_id'] = $collectPM->map(function($item, $key) {
+                return $item;
+             })->all();
+    
+             $data['pgm_id'] = $collectPGM->map(function($item1, $key1) {
+                return $item1;
+             })->all();
+    
+             $data['spr_id'] = $collectSPR->map(function($item2, $key2) {
+                return $item2;
+             })->all();
 
         }
        
@@ -126,15 +114,15 @@ class ProjectController extends Controller
 
          
          $data['PM']    = User::with('roles')->whereHas('roles',function($q){
-            $q->where('id',5);
+            $q->where('id',10);
         })->get();
 
         $data['PGM']    = User::with('roles')->whereHas('roles',function($q){
-                    $q->where('id',6);
+                    $q->where('id',11);
                 })->get();
 
         $data['SPT']    = User::with('roles')->whereHas('roles',function($q){
-                    $q->whereIn('id', [7,8]);
+                    $q->whereIn('id', [12,13]);
                 })->get();          
 
        

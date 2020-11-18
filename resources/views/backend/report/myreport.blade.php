@@ -51,7 +51,9 @@
               @foreach ($data['report'] as $item)
               <tr>
                   <td>{{ $loop->iteration }}</td>
-                  <td>{{ $item->ProjectIssues->code }}</td>
+                  <td>
+                    <a href="{{ route('report.comment', ['id' => $item['issue_id']]) }}">{{ $item->ProjectIssues->code }}</a>
+                  </td>
                   <td>{{ $item->ProjectModul->Project->name }}</td>
                   <td>{{ $item->ProjectModul->name }}</td>
                   <td>

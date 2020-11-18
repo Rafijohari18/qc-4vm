@@ -10,7 +10,7 @@
     <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-   
+
   <h4 class="font-weight-bold py-3 mb-4">
     <span class="text-muted font-weight-light">Pengaturan Akun /</span> {{ Auth::user()['name'] }}
   </h4>

@@ -74,6 +74,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(ProjectIssues::class, 'created_by');
     }
+    public function ProjectIssueComment()
+    {
+        return $this->hasMany(ProjectIssueComment::class, 'user_id');
+    }
+
+
+    
     
     
     

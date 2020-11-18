@@ -9,6 +9,7 @@ use App\Services\ReportService;
 use App\Services\ProjectService;
 use App\Models\Project;
 use App\Models\ProjectIssueOccurent;
+use App\Models\ProjectIssueComment;
 use App\Models\ProjectUser;
 use App\Models\ProjectIssues;
 use App\Models\User;
@@ -22,10 +23,11 @@ class ReportController extends Controller
 {
     private $report,$project;
 
-    public function __construct(ReportService $report,ProjectService $project)
+    public function __construct(ReportService $report,ProjectService $project,ProjectIssueComment $project_issues_comment)
     {
-        $this->report  = $report;
-        $this->project  = $project;
+        $this->report                  = $report;
+        $this->project                 = $project;
+        $this->project_issues_comment  = $project_issues_comment;
     }
 
     public function create(Request $request)
@@ -133,27 +135,13 @@ class ReportController extends Controller
     {
         $data['title']          = 'All Report';
         $data['project_user']   = $this->project->getProjectPicAll();
-        
-        if($data['project_user']){
-            foreach($data['project_user'] as $project_user){
-                $id_project[] = $project_user->project_id; 
-                
-                 $data['report']         = ProjectIssueOccurent::whereIn('project_id',[$id_project])->paginate(20);   
-                
-                 $data['total']          = $data['report']->count();
-            }
-          
-            
-           
+        foreach($data['project_user'] as $project_user){
+            $id_project[] = $project_user->project_id; 
         }
         
-        $data['total']   = 0;
+        $data['report']         = ProjectIssueOccurent::whereIn('project_id',[$id_project])->paginate(20);
         
-        
-        
-       
-        
-       
+        $data['total']          = $data['report']->count();
 
         return view('backend.report.all', compact('data'));
 
@@ -166,6 +154,23 @@ class ReportController extends Controller
         $data['total']  = $data['report']->count();
 
         return view('backend.report.myreport', compact('data'));
+    }
+
+    public function comment($id)
+    {
+        $data['title']  = 'Comment Report';
+        $data['report'] = ProjectIssues::find($id);
+        $data['comment'] = $this->project_issues_comment::where('issue_id',$id)->get();
+    
+
+        return view('backend.report.comment', compact('data'));
+        
+    }
+
+    public function commentPost(Request $request, $issue_id)
+    {
+        $this->report->commentPost($request,$issue_id);
+        return redirect()->route('my.report')->with('success','Report Berhasil di Reply !');
     }
 
     public function updateHandle($id,$issue_id)
@@ -200,9 +205,21 @@ class ReportController extends Controller
 
     public function close($id, $issue_id)
     {
+        $projectOccurent = ProjectIssueOccurent::where('id',$id)->first();
 
         ProjectIssues::where('id',$issue_id)->update(['status' => 31]);
         ProjectIssueOccurent::where('id',$id)->update(['closed_at' => date('Y-m-d H:i:s')]);
+
+        $projectOccurent = ProjectIssueOccurent::where('id',$id)->first();
+
+        $this->project_issues_comment->create([
+            'system_message'    => 0,
+            'project_id'        => $projectOccurent->project_id,
+            'module_id'         => $projectOccurent->module_id,
+            'issue_id'          => $projectOccurent->issue_id,
+            'user_id'           => Auth::user()['id'],
+            'message'           => 'Report di Close Oleh '.Auth::user()['name']
+        ]);
         
         return back()->with('success','Report Berhasil di Tutup !');
 
@@ -212,6 +229,18 @@ class ReportController extends Controller
     {
         ProjectIssues::where('id',$issue_id)->update(['status' => 30]);
         ProjectIssueOccurent::where('id',$id)->update(['solved' => 1]);
+
+
+        $projectOccurent = ProjectIssueOccurent::where('id',$id)->first();
+
+        $this->project_issues_comment->create([
+            'system_message'    => 0,
+            'project_id'        => $projectOccurent->project_id,
+            'module_id'         => $projectOccurent->module_id,
+            'issue_id'          => $projectOccurent->issue_id,
+            'user_id'           => Auth::user()['id'],
+            'message'           => 'Report di Close Oleh '.Auth::user()['name']
+        ]);
         
         return back()->with('success','Report Berhasil di Solved !');
     }

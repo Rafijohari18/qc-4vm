@@ -44,14 +44,13 @@
             </tr>
           </thead>
           <tbody>
-              @if($data['total'] == 0)
+              @if ($data['total'] == 0)
                   <tr>
-                      <td colspan="9" align="center"><i><strong style="color:red;">Tidak Ada Data di Termukan !</strong></i></td>
+                      <td colspan="8" align="center"><i><strong style="color:red;">Tidak Ada Data di Termukan !</strong></i></td>
                   </tr>
               @endif
-              
-              @if(isset($data['report']))
-              @foreach($data['report'] as $key => $item)
+            
+              @foreach ($data['report'] as $key => $item)
               <tr>
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ $item->ProjectIssues->code }}</td>
@@ -163,7 +162,6 @@
                     <!-- end modal -->
               </tr>
               @endforeach
-              @endif
           </tbody>
 
          
@@ -171,9 +169,7 @@
         </table>
       </div>
       </div>
-      @if(isset($data['report']))
-        {{ $data['report']->links() }}
-      @endif
+      {{ $data['report']->links() }}
     </div>
 
 

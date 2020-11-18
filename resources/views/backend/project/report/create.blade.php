@@ -4,10 +4,14 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/temp_backend/vendor/libs/bootstrap-select/bootstrap-select.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets/temp_backend/vendor/libs/bootstrap-multiselect/bootstrap-multiselect.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/temp_backend/vendor/libs/bootstrap-multiselect/bootstrap-multiselect.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/temp_backend/vendor/libs/select2/select2.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/temp_backend/vendor/libs/bootstrap-tagsinput/bootstrap-tagsinput.css') }}">
+
+<script src="{{ asset('assets/temp_backend/wysiwyg/tinymce.min.js') }}"></script>
 @endsection
+
+
 
 @section('content')
 <!-- Content -->
@@ -144,7 +148,7 @@
 <!-- / Content -->
 @endsection
 @section('jsfoot')
- <script src="https://cdn.tiny.cloud/1/hfi2umaf9u3p8olyawvd7ab6yi3g7n2mm3mpk5k6gqpxjitu/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+ 
 <script src="{{ asset('assets/temp_backend/vendor/libs/bootstrap-select/bootstrap-select.js') }}"></script>
 <script src="{{ asset('assets/temp_backend/vendor/libs/bootstrap-multiselect/bootstrap-multiselect.js') }}"></script>
 <script src="{{ asset('assets/temp_backend/vendor/libs/select2/select2.js') }}"></script>

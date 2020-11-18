@@ -83,7 +83,6 @@
                         </form>
                       </a>
                    
-                   <a href="{{ route('project.modul', ['id' => $item['id']]) }}" class="btn icon-btn btn-sm btn-primary" data-toggle="tooltip" data-original-title="klik untuk Tambah Modul"><i class="fa fa-eye"></i></a>
 
 
 

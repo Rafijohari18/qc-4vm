@@ -19,20 +19,18 @@
 <li class="sidenav-divider mb-1"></li>
 <li class="sidenav-header small font-weight-semibold">ELEMENTS</li>
 
-@can('data_master')
+@can('jenis_project')
 <li class="sidenav-item {{ ($segment1 == 'project' || $segment1 == 'jenis') ? 'open active' : '' }}">
     <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-apps"></i>
         <div>Data Master</div>
     </a>
 
     <ul class="sidenav-menu">
-        @can('jenis_project')
         <li class="sidenav-item {{ $segment1 == 'jenis' ? 'active' : '' }}">
             <a href="{{ route('jenis.project.index') }}" class="sidenav-link">
                 <div>Jenis Project</div>
             </a>
         </li>
-        @endcan
         @can('project')
         <li class="sidenav-item {{ $segment1 == 'project' ? 'active' : '' }}">
             <a href="{{ route('project.index') }}" class="sidenav-link">

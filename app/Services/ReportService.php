@@ -7,6 +7,7 @@ use App\Models\ProjectUser;
 use App\Models\ProjectModul;
 use App\Models\ProjectIssues;
 use App\Models\ProjectIssueOccurent;
+use App\Models\ProjectIssueComment;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -22,8 +23,8 @@ class ReportService
         ProjectUser $project_user,
         ProjectModul $project_modul,
         ProjectIssues $project_issues,
-        ProjectIssueOccurent $project_issues_occurent
-
+        ProjectIssueOccurent $project_issues_occurent,
+        ProjectIssueComment  $project_issues_comment
     )
     {
         $this->project      = $project;
@@ -31,6 +32,7 @@ class ReportService
         $this->project_modul = $project_modul;
         $this->project_issues = $project_issues;
         $this->project_issues_occurent = $project_issues_occurent;
+        $this->project_issues_comment = $project_issues_comment;
     }
 
     public function getProject(){
@@ -87,6 +89,15 @@ class ReportService
             'occurence'     => 1,
        ]);
 
+       $this->project_issues_comment->create([
+            'system_message'    => 0,
+            'project_id'        => $request->project_id,
+            'module_id'         => $request->module_id,
+            'issue_id'          => $projects->id,
+            'user_id'           => Auth::user()['id'],
+            'message'           => 'Report di Tambahkan Oleh '.Auth::user()['name']
+       ]);
+
     }
 
     public function updateHandle($id,$issue_id)
@@ -94,11 +105,33 @@ class ReportService
         $this->project_issues->where('id', $issue_id)->update(['status' => 10]);
         $this->project_issues_occurent::where('id', $id)->update(['handled_by' => Auth::user()['id']]);
         
-    }
+        $projectOccurent = $this->project_issues_occurent::where('id',$id)->first();
+
+        $this->project_issues_comment->create([
+            'system_message'    => 0,
+            'project_id'        => $projectOccurent->project_id,
+            'module_id'         => $projectOccurent->module_id,
+            'issue_id'          => $projectOccurent->issue_id,
+            'user_id'           => Auth::user()['id'],
+            'message'           => 'Report di Handle Oleh '.Auth::user()['name']
+        ]);
+    }   
 
     public function updateHold($id,$issue_id)
     {
         $this->project_issues->where('id', $issue_id)->update(['status' => 11]);
+
+        $projectIssues = $this->project_issues::where('id',$id)->first();
+
+        $this->project_issues_comment->create([
+            'system_message'    => 0,
+            'project_id'        => $projectIssues->project_id,
+            'module_id'         => $projectIssues->module_id,
+            'issue_id'          => $issue_id,
+            'user_id'           => Auth::user()['id'],
+            'message'           => 'Report di Hold Oleh '.Auth::user()['name']
+        ]);
+
     }
 
     protected function kode($module_id)
@@ -156,6 +189,15 @@ class ReportService
        
          $projects_issues->update($update_project_issues);
 
+         $this->project_issues_comment->create([
+            'system_message'    => 0,
+            'project_id'        => $request->project_id,
+            'module_id'         => $request->module_id,
+            'issue_id'          => $cek_issue->issue_id,
+            'user_id'           => Auth::user()['id'],
+            'message'           => 'Report di Update Oleh '.Auth::user()['name']
+       ]);
+
     }
 
     public function updateOccurences($request, $id)
@@ -209,6 +251,15 @@ class ReportService
             'closed_at'         => $close,
        ]);
 
+       $this->project_issues_comment->create([
+            'system_message'    => 0,
+            'project_id'        => $request->project_id,
+            'module_id'         => $request->module_id,
+            'issue_id'          => $id,
+            'user_id'           => Auth::user()['id'],
+            'message'           => 'Report di Reissue Oleh '.Auth::user()['name']
+        ]);
+
         
     }
 
@@ -218,7 +269,20 @@ class ReportService
         $this->project_issues::where('id', $issue_id)->update(['status' => 20]);       
 
         $this->project_issues_occurent::where('id', $id)
-        ->update(['handler_note' => $request->handler_note]);       
+        ->update(['handler_note' => $request->handler_note]);
+        
+        
+        $projectIssues = $this->project_issues::where('id',$issue_id)->first();
+
+        $this->project_issues_comment->create([
+            'system_message'    => 0,
+            'project_id'        => $projectIssues->project_id,
+            'module_id'         => $projectIssues->module_id,
+            'issue_id'          => $issue_id,
+            'user_id'           => Auth::user()['id'],
+            'message'           => 'Report di Fixec Oleh '.Auth::user()['name']
+        ]);
+
     }
 
     public function updateJson($data,$id)
@@ -229,6 +293,21 @@ class ReportService
         }
 
         $this->project_issues::where('id', $id)->update(['attachments' => $fileMove]);
+    }
+
+    public function commentPost($request,$issue_id)
+    {
+        $projectIssues = $this->project_issues::where('id', $issue_id)->first();
+
+        $this->project_issues_comment->create([
+            'system_message'    => 1,
+            'project_id'        => $projectIssues->project_id,
+            'module_id'         => $projectIssues->module_id,
+            'issue_id'          => $issue_id,
+            'user_id'           => Auth::user()['id'],
+            'message'           => $request->message,
+        ]);
+
     }
     
 }

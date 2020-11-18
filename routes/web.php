@@ -49,6 +49,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('report/{id}/{issue_id}/reissue', 'App\Http\Controllers\Admin\ReportController@reissue')->name('report.reissue');
         Route::get('report/{id}/{issue_id}/close', 'App\Http\Controllers\Admin\ReportController@close')->name('report.close');
         Route::get('report/{id}/{issue_id}/solved', 'App\Http\Controllers\Admin\ReportController@solved')->name('report.solved');
+        Route::get('report/{id}/comment', 'App\Http\Controllers\Admin\ReportController@comment')->name('report.comment');
+        Route::post('report/{issue_id}/comment/post', 'App\Http\Controllers\Admin\ReportController@commentPost')->name('report.comment.post');
 
         Route::put('report/{id}/update', 'App\Http\Controllers\Admin\ReportController@update')->name('report.update');
         Route::put('report/{id}/update/occurences', 'App\Http\Controllers\Admin\ReportController@updateOccurences')->name('report.update.occurences');
