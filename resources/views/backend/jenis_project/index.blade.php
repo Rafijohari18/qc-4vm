@@ -49,7 +49,7 @@
                   <td>{{ $item->name }}</td>
                   <td>
                   
-                    <a  class="btn icon-btn btn-sm btn-warning editbtn" data-toggle="modal" data-target="#modaledit" onclick="editdata({{ $item->id }})" data-name="{{ $item->name }}" >
+                    <a  class="btn icon-btn btn-sm btn-warning editbtn" data-toggle="modal" data-target="#modaledit" onclick="editdata({{ $item->id }})" data-name="{{ $item->name }}" data-description="{{ $item->description }}" >
                         <i class="fa fa-pen"></i>
                     </a>
                   
@@ -99,7 +99,7 @@
 
             <div class="form-group">
                 <label for="name">Deskripsi</label>
-                <textarea name="deskripsi" id="deskripsi" class="form-control" placeholder=""></textarea>
+                <textarea name="description" id="description" class="form-control" placeholder=""></textarea>
 
             </div>
             </div>
@@ -133,6 +133,12 @@
                     <div class="form-group">
                         <label for="name">Jenis Project</label>
                         <input type="text" name="name" id="name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Deskripsi</label>
+
+                        <textarea name="description" id="description" class="form-control" placeholder=""></textarea>
                     </div>
 
                 </div>
@@ -189,18 +195,22 @@
 
     function editSubmit()
     {
+        
         $("#editform").submit();
     }
 
     $('.editbtn').click(function(){
         var name = $(this).data('name');
+        var description = $(this).data('description');
 
         $('.modal-body #name').val(name);
+        $('.modal-body #description').val(description);
     });
 
 
   $('.add').click(function(){
     $('.modal-body #name').val('');
+    $('.modal-body #description').val('');
   });
 
 </script>
