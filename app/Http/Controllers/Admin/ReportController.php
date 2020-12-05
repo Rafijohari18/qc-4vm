@@ -135,12 +135,18 @@ class ReportController extends Controller
     {
         $data['title']          = 'All Report';
         $data['project_user']   = $this->project->getProjectPicAll();
-        foreach($data['project_user'] as $project_user){
+        
+        $id_project = [] ;
+
+        foreach($data['project_user'] as $key => $project_user){
             $id_project[] = $project_user->project_id; 
         }
         
-        $data['report']         = ProjectIssueOccurent::whereIn('project_id',[$id_project])->paginate(20);
+        // dd($id_project);        
+
+        $data['report']         = ProjectIssueOccurent::whereIn('project_id', $id_project)->paginate();
         
+
         $data['total']          = $data['report']->count();
 
         return view('backend.report.all', compact('data'));
@@ -170,19 +176,19 @@ class ReportController extends Controller
     public function commentPost(Request $request, $issue_id)
     {
         $this->report->commentPost($request,$issue_id);
-        return redirect()->route('my.report')->with('success','Report Berhasil di Reply !');
+        return back()->with('success','Report Berhasil di Reply !');
     }
 
     public function updateHandle($id,$issue_id)
     {
-        $this->report->updateHandle($id);
+        $this->report->updateHandle($id,$issue_id);
         return back()->with('success','Report Berhasil di Handle !');
         
     }
 
     public function updateHold($id,$issue_id)
     {
-        $this->report->updateHold($id);
+        $this->report->updateHold($id,$issue_id);
         return back()->with('success','Report Berhasil di Hold !');
         
     }

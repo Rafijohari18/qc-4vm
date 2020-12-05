@@ -36,7 +36,7 @@ class CreateProjectIssuesTable extends Migration
             $table->tinyInteger('status')
                 ->comment('0 = Pending, 1 = Reissued, 10 = Handled, 11 = On Hold'
                          .', 20 = Fixed, 21 = Nothing Wrong, 30 = Solved, '
-                         .'31 = Closed (not solved)');
+                         .'31 = Closed (not solved)')->nullable();
 
             $table->foreign('project_id')->references('id')->on('projects')
                     ->cascadeOnDelete();

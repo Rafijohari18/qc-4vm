@@ -4,6 +4,7 @@
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/temp_backend/bootstrap-sortable/bootstrap-sortable.css') }}">
 
+<script src="{{ asset('assets/temp_backend/wysiwyg/tinymce.min.js') }}"></script>
 @endsection
 
 @section('content')
@@ -53,7 +54,11 @@
               @foreach ($data['report'] as $key => $item)
               <tr>
                   <td>{{ $loop->iteration }}</td>
-                  <td>{{ $item->ProjectIssues->code }}</td>
+                  <td>
+                    <a href="{{ route('report.comment', ['id' => $item['issue_id']]) }}">
+                      {{ $item->ProjectIssues->code }}
+                    </a>
+                  </td>
                   <td>{{ $item->ProjectModul->Project->name }}</td>
                   <td>{{ $item->ProjectModul->name }}</td>
                   <td>
@@ -98,23 +103,34 @@
                   <td>{{ $item->User->name }}  </td>
                   @can('aksi_all_report')
                     <td>  
+
+                      
                      
                         @if($item->ProjectIssues->status == 0 || $item->ProjectIssues->status == 1 || $item->ProjectIssues->status == 11)
                         <a href="{{ route('report.handled', ['id' => $item['id'],'issue_id' => $item['issue_id']]) }}" class="btn icon-btn btn-sm btn-success" data-toggle="tooltip" data-original-title="klik untuk ambil report">
                           <i class="fas fa-hand-paper"></i>
                         </a>
 
-                        <a data-toggle="modal" data-target="#modalfixed" class="btn mt-1 icon-btn btn-sm btn-danger">
-                          <i class="fas fa-check"></i>
-                        </a>
+
+                        @elseif($item->ProjectIssues->status != 30)
+                           
+                           @if($item->ProjectIssues->status != 31)
+                              @if($item->ProjectIssues->status != 20)
+
+                                <a data-toggle="modal" data-target="#modalfixed" class="btn mt-1 icon-btn btn-sm btn-danger">
+                                  <i class="fas fa-check"></i>
+                                </a>
+                              @endif
+                            @endif
+                     
                         
                         @elseif($item->ProjectIssues->status == 10)
                         <a  class="btn icon-btn btn-sm btn-secondary" data-toggle="tooltip" data-original-title="report telah di handle">
                           <i class="fas fa-handshake"></i>
                         </a>
 
-                  
                         @endif
+                  
 
                         @if($item->ProjectIssues->cekStatus($item->id) == Auth::user()['id'] && $item->ProjectIssues->status != 11)
                         <a href="{{ route('report.hold', ['id' => $item['id'],'issue_id' => $item['issue_id']]) }}" class="btn mt-2 icon-btn btn-sm btn-info" data-toggle="tooltip" data-original-title="on hold report">
@@ -180,7 +196,7 @@
 
 @section('jsfoot')
 <script src="{{ asset('assets/temp_backend/bootstrap-sortable/bootstrap-sortable.js') }}"></script>
-<script src="https://cdn.tiny.cloud/1/hfi2umaf9u3p8olyawvd7ab6yi3g7n2mm3mpk5k6gqpxjitu/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
 
 @endsection
 
